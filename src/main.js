@@ -18,29 +18,32 @@ function clearInputError(inputElement) {
     inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
 }
 
-/* const inputEmail = document.querySelector("#email");
-console.log(inputEmail)
-function validationEmail(field){
-    // console.log(field)
-    user = field.valeu.substring(0, field.value.indexOf("@"));
-    domain = field.valeu.substring(field.value.indexOf("@")+1, field.value.length);
 
-        if ((usuario.length >=1) &&
-        (dominio.length >=3) &&
-        (usuario.search("@")==-1) &&
-        (dominio.search("@")==-1) &&
-        (usuario.search(" ")==-1) &&
-        (dominio.search(" ")==-1) &&
-        (dominio.search(".")!=-1) &&
-        (dominio.indexOf(".") >=1)&&
-        (dominio.lastIndexOf(".") < dominio.length - 1)){
-           document.getElementById("message-email").innerHTML = "Valid email"; 
-            alert("Valid email");
-        }else{
-         document.getElementById("message-email").innerHTML="font color='red'>Invalid email</font>"; 
-            alert("Invalid email");
-        }
-    }  */
+function ValidateEmail(input) {
+
+    // alert(input.value);
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  
+    if (input.value.match(validRegex)) {
+  
+        // document.getElementById("message-email").innerHTML = "Valid email"; 
+        // alert("Valid email: "+input.value);
+  
+  
+      return true;
+  
+    } else {
+  
+        if(input.name == 'email')
+            document.getElementById("message-email").innerHTML="E-mail inválido";
+        else if(input.name=='email_login') 
+            document.getElementById("message-email-login").innerHTML="E-mail inválido";
+  
+      return false;
+  
+    }
+  
+  }
 
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.querySelector("#login");
@@ -58,17 +61,34 @@ document.addEventListener("DOMContentLoaded", () => {
         createAccountForm.classList.add("form--hidden");
     });
 
-    loginForm.addEventListener("submitAccount", e => {
-        e.preventDefault();
-
-        // Perform your AJAX/Fetch login
-        setFormMessage(loginForm, "error", "Invalid username/password combination");
-
+    $('#continueLogin').off().on('click', function(){
+        if(ValidateEmail(document.forms[0].email_login)){
+            window.open('welcome.html');
+        }
+        return false;
     });
+
+    $('#continueAccount').off().on('click', function(){
+        if($('#signupUsername').val()!='') {
+
+            if($('#senha').val()==$('#confirm_senha').val() && $('#confirm_senha').val()!='') {
+                if(ValidateEmail(document.forms[1].email)){
+                    alert('Usuário criado com sucesso!');
+                    window.open('index.html');
+                }    
+            }  else {
+                alert('Preencha a senha e confirmação iguais');
+            }
+        } else {
+            alert('Preencha o usuário');
+        }
+        return false;
+    });
+ 
 
     document.querySelectorAll(".form__input").forEach(inputElement => {
         inputElement.addEventListener("blur", e => {
-            if (e.target.id === "signupUsername" && e.target.value.length > 0 && e.target.value.length < 10) {
+            if ((e.target.id === "signupUsername" || e.target.id === "email") && e.target.value.length > 0 && e.target.value.length < 10) {
                 setInputError(inputElement, "Username must be at least 10 characters in length");
             }
         });
@@ -77,9 +97,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }); 
     });
 
-   /*  loginForm.addEventListener("submit", event => {
-        event.preventDefault();
-    //   console.log(validationEmail()) 
-    }); */
 
 });
