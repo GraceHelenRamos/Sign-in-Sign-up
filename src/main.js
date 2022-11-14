@@ -21,15 +21,10 @@ function clearInputError(inputElement) {
 
 function ValidateEmail(input) {
 
-    // alert(input.value);
     var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   
     if (input.value.match(validRegex)) {
-  
-        // document.getElementById("message-email").innerHTML = "Valid email"; 
-        // alert("Valid email: "+input.value);
-  
-  
+ 
       return true;
   
     } else {
